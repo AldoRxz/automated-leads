@@ -5,7 +5,7 @@ import time
 
 # Configure Selenium with ChromeDriver
 options = webdriver.ChromeOptions()
-options.add_argument("--headless")  # Run in background
+options.add_argument("--headless")  
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
@@ -24,12 +24,35 @@ def search_businesses(name, location):
     for element in elements:
         try:
             business_name = element.find_element(By.CLASS_NAME, "qBF1Pd").text
+            business_location = element.find_element(By.CLASS_NAME, "W4Efsd").text if element.find_elements(By.CLASS_NAME, "W4Efsd") else "N/A"
+            business_phone = "N/A"
+            business_website = "N/A"
+            business_email = "N/A"
+            
+            # Click on business to open details panel
+            element.click()
+            time.sleep(3)
+            
+            # Extract phone number, website, and email if available
+            try:
+                details = driver.find_elements(By.CLASS_NAME, "UsdlK")
+                for detail in details:
+                    text = detail.text
+                    if "@" in text:
+                        business_email = text
+                    elif text.startswith("http"):
+                        business_website = text
+                    elif text.replace(" ", "").isdigit():
+                        business_phone = text
+            except:
+                pass
+            
             business_info = {
                 "nom": business_name,
-                "num": "N/A",  
-                "web": "N/A",  
-                "ubi": "N/A",  
-                "email": "N/A"  
+                "num": business_phone,
+                "web": business_website,
+                "ubi": business_location,
+                "email": business_email
             }
             businesses.append(business_info)
         except:
