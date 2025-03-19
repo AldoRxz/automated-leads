@@ -1,6 +1,5 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 import time
 
 # Configure Selenium with ChromeDriver
@@ -24,16 +23,21 @@ def search_businesses(name, location):
     for element in elements:
         try:
             business_name = element.find_element(By.CLASS_NAME, "qBF1Pd").text
-            business_location = element.find_element(By.CLASS_NAME, "W4Efsd").text if element.find_elements(By.CLASS_NAME, "W4Efsd") else "N/A"
+            element.click()
+            time.sleep(3)
+            
+            # Extracting business details
+            business_location = "N/A"
             business_phone = "N/A"
             business_website = "N/A"
             business_email = "N/A"
             
-            # Click on business to open details panel
-            element.click()
-            time.sleep(3)
+            try:
+                location_element = driver.find_element(By.CLASS_NAME, "Io6YTe")
+                business_location = location_element.text
+            except:
+                pass
             
-            # Extract phone number, website, and email if available
             try:
                 details = driver.find_elements(By.CLASS_NAME, "UsdlK")
                 for detail in details:
@@ -59,7 +63,6 @@ def search_businesses(name, location):
             continue
     
     return businesses
-
 
 # Example 
 search_name = "taller mecanico"
