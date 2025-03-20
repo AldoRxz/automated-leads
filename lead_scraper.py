@@ -65,7 +65,7 @@ def search_businesses(name, location):
     return businesses
 
 # Example 
-search_name = "taller mecanico"
+search_name = "taller de autopartes"
 search_location = "CDMX"
 results = search_businesses(search_name, search_location)
 
