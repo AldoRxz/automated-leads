@@ -1,2 +1,8 @@
 echo ".venv/" >> .gitignore
+echo "venv/" >> .gitignore
+.venv/
+
 credentials.json
+credenciales.json
+
+.env
